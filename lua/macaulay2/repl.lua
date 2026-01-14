@@ -41,13 +41,13 @@ local function open_window(direction, size)
   local win_size = calc_size(direction, size)
 
   if direction == "vertical" then
-    vim.cmd("vsplit")
+    vim.cmd("rightbelow vsplit")
     vim.cmd("enew") -- Create new buffer so we don't share with original window
     if win_size then
       vim.cmd("vertical resize " .. win_size)
     end
   elseif direction == "horizontal" then
-    vim.cmd("split")
+    vim.cmd("rightbelow split")
     vim.cmd("enew") -- Create new buffer so we don't share with original window
     if win_size then
       vim.cmd("resize " .. win_size)
