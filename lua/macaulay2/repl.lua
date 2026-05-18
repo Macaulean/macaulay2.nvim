@@ -202,12 +202,24 @@ function M.send(text)
   end
 
   vim.api.nvim_chan_send(state.chan, text)
+  
+  -- Auto-scroll REPL window to bottom if visible
+  if is_win_valid() then
+    local current_win = vim.api.nvim_get_current_win()
+    vim.api.nvim_set_current_win(state.winid)
+    vim.cmd("normal! G")
+    vim.api.nvim_set_current_win(current_win)
+  end
 end
 
 -- Send current line to REPL
 function M.send_line()
   local line = vim.api.nvim_get_current_line()
   M.send(line)
+  
+  -- Move to next line
+  local row = vim.api.nvim_win_get_cursor(0)[1]
+  vim.api.nvim_win_set_cursor(0, {row + 1, 0})
 end
 
 -- Send visual selection to REPL
