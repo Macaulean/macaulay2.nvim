@@ -33,6 +33,7 @@ local subcommands = {
     fn = function(args)
       if args and args ~= "" then
         repl.send(args)
+		vim.cmd("normal! j")
       else
         vim.notify("Usage: :M2 send {code}", vim.log.levels.WARN)
       end
