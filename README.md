@@ -17,11 +17,19 @@ A Neovim plugin for [Macaulay2](https://macaulay2.com), providing REPL integrati
 
 ## Installation
 
+Using nvim's [pack.add](https://neovim.io/doc/user/pack/):
+
+In your `init.lua`, add
+
+```lua
+vim.pack.add({'https://github.com/Macaulean/macaulay2.nvim'})
+```
+
 Using [lazy.nvim](https://github.com/folke/lazy.nvim):
 
 ```lua
 {
-  "mattrobball/macaulay2.nvim",
+  "Macaulean/macaulay2.nvim",
   ft = "macaulay2",
   opts = {},
 }
