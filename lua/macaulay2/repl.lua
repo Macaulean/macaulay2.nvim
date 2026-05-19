@@ -219,7 +219,10 @@ function M.send_line()
   
   -- Move to next line
   local row = vim.api.nvim_win_get_cursor(0)[1]
-  vim.api.nvim_win_set_cursor(0, {row + 1, 0})
+  local bottom = vim.api.nvim_buf_line_count(0)
+  if row < bottom then
+    vim.api.nvim_win_set_cursor(0, {row + 1, 0})
+  end
 end
 
 -- Send visual selection to REPL
