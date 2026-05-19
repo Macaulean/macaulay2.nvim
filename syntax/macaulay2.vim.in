@@ -1,0 +1,92 @@
+" Vim syntax file
+" Language: Macaulay2
+" Maintainer: macaulay2.nvim
+" @M2BANNER@
+
+if exists("b:current_syntax")
+  finish
+endif
+
+" Case sensitive
+syn case match
+
+" Comments
+syn match m2Comment "--.*$" contains=m2Todo
+syn keyword m2Todo contained TODO FIXME XXX NOTE HACK BUG
+
+" Strings
+" Double-quoted strings
+syn region m2String start=+"+ skip=+\\\\\|\\"+ end=+"+ contains=m2StringEscape
+syn match m2StringEscape contained +\\[\\nrtb"]+
+
+" Triple-slash strings (///...///)
+syn region m2String start=+///+ end=+///+
+
+" Numbers
+syn match m2Number "\<\d\+\>"
+syn match m2Number "\<\d\+\.\d*\>"
+syn match m2Number "\<\d*\.\d\+\>"
+syn match m2Number "\<\d\+[eE][+-]\=\d\+\>"
+syn match m2Number "\<\d\+\.\d*[eE][+-]\=\d\+\>"
+syn match m2Number "\<\d*\.\d\+[eE][+-]\=\d\+\>"
+" Complex numbers with p for precision
+syn match m2Number "\<\d\+p\d\+\>"
+
+" Control flow keywords
+syn keyword m2Keyword @M2KEYWORDS@
+
+" Built-in types
+syn keyword m2Type @M2DATATYPES@
+
+" Common functions (most frequently used)
+syn keyword m2Function @M2FUNCTIONS@
+
+" Constants
+syn keyword m2Constant @M2CONSTANTS@
+
+" Operators
+syn match m2Operator "[-+*/^]"
+syn match m2Operator "\.\."
+syn match m2Operator "\.\.\."
+syn match m2Operator "//"
+syn match m2Operator "\\\\"
+syn match m2Operator "=="
+syn match m2Operator "!="
+syn match m2Operator "<="
+syn match m2Operator ">="
+syn match m2Operator "[<>]"
+syn match m2Operator ":="
+syn match m2Operator "<-"
+syn match m2Operator "->"
+syn match m2Operator "=>"
+syn match m2Operator "||"
+syn match m2Operator "&&"
+syn match m2Operator "@@"
+syn match m2Operator "[#_@|:?!~]"
+
+" Delimiters
+syn match m2Delimiter "[{}()\[\],;]"
+
+" Special: subscripts and indices
+syn match m2Subscript "\w\+_\d\+"
+syn match m2Subscript "\w\+_{\w\+}"
+
+" Sync for multiline constructs
+syn sync minlines=50
+syn sync maxlines=500
+
+" Highlight links
+hi def link m2Comment Comment
+hi def link m2Todo Todo
+hi def link m2String String
+hi def link m2StringEscape SpecialChar
+hi def link m2Number Number
+hi def link m2Keyword Statement
+hi def link m2Type Type
+hi def link m2Function Function
+hi def link m2Constant Constant
+hi def link m2Operator Operator
+hi def link m2Delimiter Delimiter
+hi def link m2Subscript Special
+
+let b:current_syntax = "macaulay2"
