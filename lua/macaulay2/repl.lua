@@ -123,6 +123,15 @@ function M.start()
   -- Set buffer options
   vim.api.nvim_buf_set_name(state.bufnr, "Macaulay2 REPL")
   vim.bo[state.bufnr].buflisted = false
+  -- Apply configured filetype for syntax highlighting (if set)
+  local ft = opts.repl.filetype
+  if ft and ft ~= "" then
+    pcall(vim.api.nvim_buf_set_option, state.bufnr, "filetype", ft)
+    -- Trigger FileType autocmds for this buffer if available
+    pcall(function()
+      vim.api.nvim_exec_autocmds("FileType", {pattern = ft, bufnr = state.bufnr})
+    end)
+  end
 
   -- Return to original window
   vim.api.nvim_set_current_win(current_win)

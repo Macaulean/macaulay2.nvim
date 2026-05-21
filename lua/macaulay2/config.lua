@@ -13,6 +13,9 @@ M.defaults = {
       width = 0.8,
       height = 0.8,
     },
+    -- Filetype to apply to the REPL buffer for syntax highlighting.
+    -- Set to nil to leave terminal's default filetype.
+    filetype = "macaulay2",
   },
   completion = {
     enabled = true,

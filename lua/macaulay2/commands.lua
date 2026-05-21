@@ -41,6 +41,25 @@ local subcommands = {
     desc = "Send code to the REPL",
     nargs = true,
   },
+  addkeywords = {
+    fn = function(args)
+      if not args or args == "" then
+        vim.notify("Usage: :M2 addkeywords <kind> <word1> [word2 ...]", vim.log.levels.WARN)
+        return
+      end
+      local parts = vim.split(args, "%s+", {trimempty = true})
+      local kind = table.remove(parts, 1)
+      local hl = require("macaulay2.highlight")
+      local ok, err = hl.add(kind, parts)
+      if not ok then
+        vim.notify("Failed to add keywords: " .. tostring(err), vim.log.levels.ERROR)
+      else
+        vim.notify("Added " .. tostring(#parts) .. " keywords to " .. kind, vim.log.levels.INFO)
+      end
+    end,
+    desc = "Add keywords to Macaulay2 syntax (kinds: function, constant, type, keyword)",
+    nargs = true,
+  },
   help = {
     fn = function(args)
       if args and args ~= "" then
