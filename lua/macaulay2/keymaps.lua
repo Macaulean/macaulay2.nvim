@@ -21,7 +21,7 @@ function M.setup_plug_mappings()
   end, { desc = "Send selection to M2" })
   vim.keymap.set("n", "<Plug>(macaulay2-send-buffer)", repl.send_buffer, { desc = "Send buffer to M2" })
 
-  -- Help
+  -- Help (also bound to <localleader>h as LSP-safe alternative)
   vim.keymap.set("n", "<Plug>(macaulay2-help-cursor)", repl.help_cursor, { desc = "M2 help for word under cursor" })
 end
 
@@ -51,8 +51,9 @@ function M.setup_buffer_keymaps(bufnr)
   -- Send buffer
   vim.keymap.set("n", prefix .. "r", repl.send_buffer, vim.tbl_extend("force", map_opts, { desc = "Send buffer to M2" }))
 
-  -- Help for word under cursor (K)
+  -- Help for word under cursor: K (may be overridden by LSP hover on attach)
   vim.keymap.set("n", "K", repl.help_cursor, vim.tbl_extend("force", map_opts, { desc = "M2 help for word under cursor" }))
+  vim.keymap.set("n", prefix .. "h", repl.help_cursor, vim.tbl_extend("force", map_opts, { desc = "M2 help for word under cursor" }))
 
   -- Focus REPL
   vim.keymap.set("n", prefix .. "f", repl.focus, vim.tbl_extend("force", map_opts, { desc = "Focus M2 REPL" }))

@@ -17,6 +17,11 @@ M.defaults = {
   completion = {
     enabled = true,
   },
+  lsp = {
+    enabled = true,
+    cmd = { "M2-language-server" },
+    settings = {},
+  },
   keymaps = {
     enabled = true,
     prefix = "<localleader>",

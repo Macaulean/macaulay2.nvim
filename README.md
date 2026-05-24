@@ -9,11 +9,13 @@ A Neovim plugin for [Macaulay2](https://macaulay2.com), providing REPL integrati
 - Inline help lookup with `viewHelp`
 - Keyword completion
 - Filetype detection for `.m2` files
+- LSP integration via M2-language-server (hover, completion, and go-to-definition)
 
 ## Requirements
 
-- Neovim >= 0.8
+- Neovim >= 0.8 (>= 0.9 for LSP support)
 - [Macaulay2](https://macaulay2.com) installed and available in your PATH
+- M2-language-server (optional, for LSP features; bundled with Macaulay2)
 
 ## Installation
 
@@ -58,6 +60,11 @@ Default configuration with all options:
     completion = {
       enabled = true,          -- Enable keyword completion
     },
+    lsp = {
+      enabled = true,          -- Auto-start LSP when M2-language-server is found
+      cmd = { "M2-language-server" }, -- Command to launch the server
+      settings = {},           -- Server-specific settings passed via LSP
+    },
     keymaps = {
       enabled = true,          -- Enable default keymaps
       prefix = "<localleader>",
@@ -74,12 +81,20 @@ Default keymaps are enabled in `.m2` files:
 |-----|------|-------------|
 | `<CR>` | n | Send current line to REPL |
 | `<CR>` | x | Send selection to REPL |
-| `K` | n | Show help for word under cursor |
+| `K` | n | Show help for word under cursor (overridden by LSP hover when server is active) |
+| `<localleader>h` | n | Show M2 help for word under cursor (always uses REPL) |
 | `<localleader>s` | n | Toggle REPL |
 | `<localleader>o` | n | Start REPL |
 | `<localleader>c` | n | Stop REPL |
 | `<localleader>f` | n | Focus REPL window |
 | `<localleader>r` | n | Send entire buffer to REPL |
+
+When the LSP server is active, the following additional keymaps are set on attach:
+
+| Key | Mode | Description |
+|-----|------|-------------|
+| `K` | n | LSP hover documentation |
+| `gd` | n | Go to definition |
 
 ### Plug Mappings
 
