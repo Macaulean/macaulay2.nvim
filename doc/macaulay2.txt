@@ -14,7 +14,8 @@ CONTENTS                                                   *macaulay2-contents*
     6. Keymaps ................................ |macaulay2-keymaps|
     7. REPL ................................... |macaulay2-repl|
     8. Completion ............................. |macaulay2-completion|
-    9. Health Check ........................... |macaulay2-health|
+    9. LSP .................................... |macaulay2-lsp|
+   10. Health Check ........................... |macaulay2-health|
 
 ==============================================================================
 1. INTRODUCTION                                        *macaulay2-introduction*
@@ -25,14 +26,16 @@ support for the Macaulay2 computer algebra system. It includes:
 - Syntax highlighting for `.m2` files
 - Interactive REPL integration
 - Autocompletion via nvim-cmp
+- LSP integration via M2-language-server (hover, completion, go-to-definition)
 - Helpful keymaps for sending code to the REPL
 
 ==============================================================================
 2. REQUIREMENTS                                        *macaulay2-requirements*
 
-- Neovim >= 0.8.0
+- Neovim >= 0.8.0 (>= 0.9.0 for LSP support)
 - Macaulay2 installed and available in PATH (or configured path)
 - nvim-cmp (optional, for autocompletion)
+- M2-language-server (optional, for LSP features; bundled with Macaulay2)
 
 ==============================================================================
 3. INSTALLATION                                        *macaulay2-installation*
@@ -77,6 +80,11 @@ Default configuration: >lua
         completion = {
             enabled = true,         -- Enable nvim-cmp completion
         },
+        lsp = {
+            enabled = true,         -- Auto-start LSP when server is found
+            cmd = { "M2-language-server" }, -- Command to launch the server
+            settings = {},          -- Server-specific settings
+        },
         keymaps = {
             enabled = true,         -- Enable default keymaps
             prefix = "<localleader>",
@@ -104,6 +112,16 @@ repl.size ~
                                                  *macaulay2-config-completion*
 completion.enabled ~
     Enable or disable nvim-cmp completion. Default: true
+
+                                                         *macaulay2-config-lsp*
+lsp.enabled ~
+    Enable or disable LSP auto-start. Default: true
+
+lsp.cmd ~
+    Command to launch the language server. Default: { "M2-language-server" }
+
+lsp.settings ~
+    Server-specific settings table passed via LSP. Default: {}
 
                                                     *macaulay2-config-keymaps*
 keymaps.enabled ~
@@ -154,7 +172,15 @@ Buffer-local keymaps (in `.m2` files):
     <localleader>f       n       Focus REPL window
     <localleader>o       n       Start REPL
     <localleader>c       n       Stop REPL
-    K                    n       Show help for word under cursor
+    <localleader>h       n       M2 help for word under cursor (always uses REPL)
+    K                    n       M2 help for word under cursor (overridden by
+                                 LSP hover when the server is active)
+
+When M2-language-server is active, these keymaps are set on attach:
+
+    Mapping              Mode    Description ~
+    K                    n       LSP hover documentation
+    gd                   n       Go to definition
 
                                                     *macaulay2-plug-mappings*
 Plug mappings (always available):
@@ -210,7 +236,40 @@ The completion source is automatically registered with nvim-cmp for the
 "macaulay2" filetype.
 
 ==============================================================================
-9. HEALTH CHECK                                            *macaulay2-health*
+9. LSP                                                        *macaulay2-lsp*
+
+When M2-language-server is installed and `lsp.enabled = true`, the plugin
+automatically starts the language server when a Macaulay2 buffer is opened.
+The server is bundled with Macaulay2.
+
+Supported LSP features:
+- Hover documentation (|K|)
+- Completion (via built-in LSP or nvim-cmp with cmp-nvim-lsp)
+- Go-to-definition (|gd|)
+
+The server is started with |vim.lsp.start()| and reuses an existing client
+when multiple `.m2` files are open. Root directory is detected from `.git`;
+if none is found, the directory of the current file is used.
+
+To disable LSP: >lua
+    require("macaulay2").setup({
+        lsp = { enabled = false },
+    })
+<
+
+To use a custom server command: >lua
+    require("macaulay2").setup({
+        lsp = { cmd = { "/path/to/M2-language-server" } },
+    })
+<
+
+Lua API: >lua
+    local lsp = require("macaulay2").lsp
+    lsp.start(bufnr)   -- Start the server for a buffer
+<
+
+==============================================================================
+10. HEALTH CHECK                                           *macaulay2-health*
 
 Run `:checkhealth macaulay2` to verify your setup.
 
@@ -218,6 +277,7 @@ The health check verifies:
 - Neovim version compatibility
 - Macaulay2 executable availability
 - nvim-cmp installation (optional)
+- M2-language-server availability (optional)
 - Current configuration
 
 ==============================================================================

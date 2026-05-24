@@ -15,7 +15,14 @@ vim.bo.shiftwidth = 4
 vim.bo.expandtab = true
 
 -- Setup buffer-local keymaps
+local bufnr = vim.api.nvim_get_current_buf()
 local ok, keymaps = pcall(require, "macaulay2.keymaps")
 if ok then
-  keymaps.setup_buffer_keymaps(vim.api.nvim_get_current_buf())
+  keymaps.setup_buffer_keymaps(bufnr)
+end
+
+-- Start LSP server
+local ok_lsp, lsp = pcall(require, "macaulay2.lsp")
+if ok_lsp then
+  lsp.start(bufnr)
 end

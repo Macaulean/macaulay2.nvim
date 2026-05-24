@@ -4,6 +4,7 @@ local M = {}
 local config = require("macaulay2.config")
 local commands = require("macaulay2.commands")
 local keymaps = require("macaulay2.keymaps")
+local lsp = require("macaulay2.lsp")
 
 -- Track if setup has been called
 local is_setup = false
@@ -23,6 +24,9 @@ function M.setup(opts)
   -- Setup Plug mappings
   keymaps.setup_plug_mappings()
 
+  -- Setup LSP if enabled
+  lsp.setup()
+
   -- Setup completion if enabled
   local cfg = config.get()
   if cfg.completion.enabled then
@@ -37,6 +41,7 @@ end
 
 -- Re-export submodules for convenience
 M.repl = require("macaulay2.repl")
+M.lsp = lsp
 M.config = config
 
 return M
