@@ -12,6 +12,7 @@ syn case match
 
 " Comments
 syn match m2Comment "--.*$" contains=m2Todo
+syn region m2Comment start="-\*" end="\*-" contains=m2Comment,m2Todo
 syn keyword m2Todo contained TODO FIXME XXX NOTE HACK BUG
 
 " Strings
